@@ -1,0 +1,158 @@
+def chk_m(x, y):
+    if x == "M":
+        return memory, y
+    elif y == "M":
+        return x, memory
+    else:
+        return x, y
+
+
+def splt():
+    global x
+    global y
+    global oper
+    x, oper, y = input(msg[0]).split(" ")
+    x, y = chk_m(x, y)
+
+
+def float_check(x):
+    try:
+        value = float(x)
+        return True
+    except ValueError:
+        return False
+
+
+def dig_check(x, y):
+    if not float_check(x) or not float_check(y):
+        print(msg[1])
+        return True
+    else:
+        return False
+
+
+def oper_check(oper):
+    if oper in ["+", "-", "/", "*"]:
+        return True
+    else:
+        print(msg[2])
+        return False
+
+
+def results(oper):
+    check(x, y, oper)
+    global result
+    if oper == "+":
+        result = float(x) + float(y)
+        print(result)
+        return True
+    elif oper == "-":
+        result = float(x) - float(y)
+        print(result)
+        return True
+    elif oper == "*":
+        result = float(x) * float(y)
+        print(result)
+        return True
+    elif y == 0 or y == "0":
+        print(msg[3])
+        return False
+    elif oper == "/" and (y != '0' or y != 0):
+        result = float(x) / float(y)
+        print(result)
+        return True
+
+
+def store():
+    global answer
+    global memory
+
+    answer = input(msg[4])
+    if answer == 'y':
+        if is_one_digit(result) is True:
+            msg_index = 10
+
+            while True:
+                ansr = input(msg[msg_index])
+                if ansr == 'y':
+                    if msg_index < 12:
+                        msg_index = msg_index + 1
+                        return False
+                    else:
+                        memory = result
+                        return True
+                elif ansr == 'n':
+                    memory = result
+                    return True
+                else:
+                    return False
+        else:
+            memory = result
+            return True
+    elif answer == 'n':
+        return False
+
+
+def conti():
+    answer = input(msg[5])
+    while True:
+        if answer == 'y':
+            return True
+            break
+        elif answer == 'n':
+            break
+        else:
+            answer = input(msg[5])
+
+
+def is_one_digit(v):
+    if float(v) > -10 and float(v) < 10 and float(v).is_integer():
+        return True
+    else:
+        return False
+
+
+def check(x, y, oper):
+    msge = ""
+    if is_one_digit(x) and is_one_digit(y):
+        msge = msge + msg[6]
+    else:
+        pass
+    if (x == "1" or y == "1") and (oper == "*"):
+        msge = msge + msg[7]
+    else:
+        pass
+    if (float(x) == 0 or float(y) == 0) and (oper in ["+", "-", "*"]):
+        msge = msge + msg[8]
+    else:
+        pass
+    if msge != "":
+        msge = msg[9] + msge
+        print(msge)
+    else:
+        pass
+
+
+msg = ["Enter an equation",
+       "Do you even know what numbers are? Stay focused!",
+       "Yes ... an interesting math operation. You've slept through all classes, haven't you?",
+       "Yeah... division by zero. Smart move...",
+       "Do you want to store the result? (y / n):",
+       "Do you want to continue calculations? (y / n):",
+       " ... lazy",
+       " ... very lazy",
+       " ... very, very lazy",
+       "You are",
+       "Are you sure? It is only one digit! (y / n)",
+       "Don't be silly! It's just one number! Add to the memory? (y / n)",
+       "Last chance! Do you really want to embarrass yourself? (y / n)"]
+memory = 0
+while True:
+    splt()
+    while (dig_check(x, y) is True) or (oper_check(oper) is False) or (results(oper) is False):
+        splt()
+    store()
+    if conti() == True:
+        pass
+    else:
+        break
